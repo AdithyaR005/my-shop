@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>Adithya Shop - Checkout</title>
+</head>
+<body>
+    <header>
+        <h1>✅ Checkout</h1>
+    </header>
+
+    <main>
+        <section class="checkout-section">
+            <form id="checkout-form" class="checkout-form">
+                <h2>Delivery Details</h2>
+                <input type="text" placeholder="Full Name" required>
+                <input type="email" placeholder="Email Address" required>
+                <input type="tel" placeholder="Mobile Number" maxlength="10" required>
+                <textarea placeholder="Delivery Address" rows="4" required></textarea>
+
+                <h2>Payment Details</h2>
+                <input type="text" placeholder="Reference Number (Optional)">
+                
+                <h2>Order Summary</h2>
+                <div id="order-summary" class="order-summary">
+                    <!-- Order will load here -->
+                </div>
+
+                <button type="submit" class="submit-btn">Place Order</button>
+            </form>
+
+            <div id="confirmation" class="confirmation" style="display: none;">
+                <h2>✅ Order Confirmed!</h2>
+                <p>Thank you for shopping at Adithya Shop!</p>
+                <p>Your order has been placed successfully.</p>
+                <a href="index.html" class="back-btn">Continue Shopping</a>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Adithya Shop</p>
+    </footer>
+
+    <script src="products.js"></script>
+    <script src="cart.js"></script>
+    <script>
+        function renderOrderSummary() {
+            const cart = getCart();
+            const summary = document.getElementById('order-summary');
+            const total = getCartTotal();
+
+            summary.innerHTML = `
+                <div class="summary-items">
+                    ${cart.map(item => `
+                        <div class="summary-item">
+                            <span>${item.name} x ${item.quantity}</span>
+                            <span>₹${item.price * item.quantity}</span>
+                        </div>
+                    `).join('')}
+                </div>
+                <hr>
+                <div class="summary-total">
+                    <strong>Total: ₹${total}</strong>
+                </div>
+            `;
+        }
+
+        document.getElementById('checkout-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            // Save order (you can send this to a server)
+            const formData = new FormData(e.target);
+            console.log('Order placed:', Object.fromEntries(formData));
+
+            // Clear cart
+            localStorage.removeItem('cart');
+
+            // Show confirmation
+            document.getElementById('checkout-form').style.display = 'none';
+            document.getElementById('confirmation').style.display = 'block';
+        });
+
+        document.addEventListener('DOMContentLoaded', renderOrderSummary);
+    </script>
+</body>
+</html>
